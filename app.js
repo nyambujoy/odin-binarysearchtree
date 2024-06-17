@@ -175,6 +175,32 @@ class BinarySearchTree {
         traverse(this.root)
         return result
     }
+    height(root) {
+        if (root === null) {
+            return -1;
+        }
+        let leftHeight = this.height(root.left)
+        let rightHeight = this.height(root.right)
+
+        return leftHeight > rightHeight ? leftHeight + 1 : rightHeight + 1
+    }
+    depth(value) {
+        return this.depthNode(this.root, value)
+    }
+    depthNode(root, value, currentDepth = 0) {
+        if (root === null) {
+            return -1
+        }
+        if (root.value === value) {
+            return currentDepth
+        }
+        if (root.value < value) {
+            return this.depthNode(root.left, value, currentDepth + 1)
+        } else {
+            return this.depthNode(root.right, value, currentDepth + 1)
+
+        }
+    }
 }
 
 const bst = new BinarySearchTree()
@@ -191,9 +217,11 @@ console.log(bst.search(10))
 // bst.levelOrder()
 // bst.levelOrderNormal()
 // bst.preorder(bst.root)
-// bst.inorder(bst.root)
-bst.postOrder(bst.root)
+bst.inorder(bst.root)
+// bst.postOrder(bst.root)
 // bst.inorderCallB(value => console.log(value))
 // console.log(bst.inorderCallB())
 // console.log(bst.preorderCallb())
-console.log(bst.postOrderCallB())
+// console.log(bst.postOrderCallB())
+console.log("Height of the tree:", bst.height(bst.root));
+console.log("Depth of node with value 10:", bst.depth(10));
