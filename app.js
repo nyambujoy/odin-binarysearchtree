@@ -201,6 +201,53 @@ class BinarySearchTree {
 
         }
     }
+    isBalanced(root) {
+        return this.checkBalance(this.root).balanced
+    }
+    checkBalance(root) {
+        if (root === null) {
+            return { height: -1, balanced: true }
+        }
+
+        let left = this.checkBalance(root.left)
+        let right = this.checkBalance(root.right)
+        let balanced = left.balanced && right.balanced && Math.abs(left.height - right.height) <= 1
+        let height = Math.max(left.height, right.height)
+
+        return { balanced: balanced, height: height }
+    }
+    delete(value) {
+        return this.deleteItem(this.root, value)
+    }
+    deleteItem(root, value) {
+        if (root === null) {
+            return root
+        }
+        if (value < root.value) {
+            root.left = this.deleteItem(root.left, value)
+        } else if (value > root.value) {
+            root.right = this.deleteItem(root.right, value)
+        } else {
+            if (!root.left && !root.right) {
+                return null
+            }
+            if (!root.left) {
+                return root.right
+            } else if (!root.right) {
+                return root.left
+            }
+            root.value = this.min(root.right)
+            root.right = this.deleteItem(root.right, root.value)
+        }
+        return root
+    }
+    min(root) {
+        if (!root.left) {
+            return root.value
+        } else {
+            return this.min(root.left)
+        }
+    }
 }
 
 const bst = new BinarySearchTree()
@@ -225,3 +272,7 @@ bst.inorder(bst.root)
 // console.log(bst.postOrderCallB())
 console.log("Height of the tree:", bst.height(bst.root));
 console.log("Depth of node with value 10:", bst.depth(10));
+console.log(bst.isBalanced(bst.root))
+bst.delete(3)
+bst.inorder(bst.root)
+
